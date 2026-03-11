@@ -1,4 +1,3 @@
-
 import streamlit as st
 import sqlite3
 import pandas as pd
@@ -133,8 +132,9 @@ else:  # Business Impact
     
     # Calculate impacts
     invalid_orders = len(dirty_orders) - len(clean_sales)
-    revenue_diff = dirty_orders[dirty_orders['status'] == 'completed']['quantity'] * dirty_orders[dirty_orders['status'] == 'completed']['unit_price']
-    revenue_diff = revenue_diff.sum() - clean_sales['revenue'].sum()
+    dirty_revenue = dirty_orders[dirty_orders['status'] == 'completed']['quantity'] * dirty_orders[dirty_orders['status'] == 'completed']['unit_price']
+    dirty_revenue = dirty_revenue.sum() if not dirty_revenue.empty else 0
+    revenue_diff = dirty_revenue - clean_sales['revenue'].sum()
     
     # Top products comparison
     dirty_top = dirty_orders[dirty_orders['status'] == 'completed'].groupby('product_id')['quantity'].sum().reset_index()
@@ -177,4 +177,4 @@ else:  # Business Impact
     """)
 
 st.markdown("---")
-st.caption("Built with SQL-first validation framework | [GitHub Repository](https://github.com/yourusername/sql-analytics-framework)")
+st.caption("Built with SQL-first validation framework | [GitHub Repository](https://github.com/mwangombanicholas/sql-analytics-framework)")
